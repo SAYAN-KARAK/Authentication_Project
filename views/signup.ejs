@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+    />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f2f5;
+        margin: 0;
+      }
+
+      .container {
+        background: #fff;
+        max-width: 400px;
+        width: 100%;
+        padding: 2rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+
+      h3 {
+        text-align: center;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 1.5rem;
+      }
+
+      .form-label {
+        font-weight: 500;
+        color: #555;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+      }
+
+      .form-select {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        margin-top: 0.5rem;
+      }
+
+      .error-message {
+        color: #e74c3c;
+        font-size: 0.9em;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .warning {
+        color: #e74c3c;
+        font-size: 0.8em;
+        margin-top: 0.3rem;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 0.75rem;
+        margin-top: 1.5rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .btn:hover {
+        background-color: #0056b3;
+      }
+
+      .text-center {
+        text-align: center;
+        margin-top: 1rem;
+      }
+
+      .text-center a {
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      .text-center a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h3>Sign Up</h3>
+      <% if (typeof error !== 'undefined') { %>
+      <div class="error-message"><%= error %></div>
+      <% } %>
+      <form id="signupForm" action="/auth/signup" method="POST">
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            required
+          />
+          <div id="passwordWarning" class="warning"></div>
+        </div>
+        <div class="mb-3">
+          <label for="role" class="form-label">Account Type</label>
+          <select
+            class="form-select"
+            id="role"
+            name="role"
+            onchange="checkAdminRole()"
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="mb-3" id="securityQuestion" style="display: none">
+          <label for="security" class="form-label"
+            >Security Question: What is the admin code?</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="security"
+            name="security"
+          />
+        </div>
+        <button type="submit" class="btn">Sign Up</button>
+      </form>
+      <div class="text-center mt-3">
+        <p>Already have an account? <a href="/auth/login">Login</a></p>
+      </div>
+    </div>
+
+    <script>
+      const passwordInput = document.getElementById("password");
+      const passwordWarning = document.getElementById("passwordWarning");
+
+      // Password strength validation
+      passwordInput.addEventListener("input", () => {
+        const password = passwordInput.value;
+        const passwordRegex =
+          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
+
+        if (!passwordRegex.test(password)) {
+          passwordWarning.textContent =
+            "Password must contain at least one letter, one number, and one special character.";
+        } else {
+          passwordWarning.textContent = "";
+        }
+      });
+
+      // Show security question if "Admin" is selected
+      function checkAdminRole() {
+        const role = document.getElementById("role").value;
+        const securityQuestion = document.getElementById("securityQuestion");
+        securityQuestion.style.display = role === "admin" ? "block" : "none";
+      }
+    </script>
+  </body>
+</html>
