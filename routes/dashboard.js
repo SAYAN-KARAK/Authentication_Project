@@ -25,7 +25,7 @@ router.get("/", isAuthenticated, async (req, res) => {
   res.render("dashboard", { user, suggestions });
 });
 
-// Route to submit feedback
+// Route to submit feedback (POST)
 router.post("/suggest", isAuthenticated, async (req, res) => {
   const { suggestion } = req.body;
 

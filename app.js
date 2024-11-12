@@ -3,6 +3,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
+const bodyParser = require("body-parser");
+
+const dashboardRoutes = require("./routes/dashboard");
+
 const app = express();
 
 // Passport Config
@@ -21,7 +25,8 @@ mongoose
 app.set("view engine", "ejs");
 
 // Bodyparser
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Express session
 app.use(
@@ -39,6 +44,7 @@ app.use(passport.session());
 // Routes
 app.use("/auth", require("./routes/auth"));
 app.use("/user", require("./routes/user"));
+app.use("/dashboard", dashboardRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
