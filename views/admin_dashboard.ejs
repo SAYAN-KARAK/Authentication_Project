@@ -9,57 +9,52 @@
       rel="stylesheet"
     />
     <style>
-      .table-container {
-        margin-top: 40px;
+      .container {
+        max-width: 800px;
+        margin-top: 50px;
       }
-      h3 {
-        margin-top: 20px;
+      .feedback-card {
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .rating {
+        font-weight: bold;
+        color: #ffd700;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <h3 class="text-center">Admin Dashboard</h3>
-      <p class="text-center">Manage User Data</p>
+      <p class="text-center">View user feedback, traffic, and ratings.</p>
 
-      <div class="table-container">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% users.forEach(function(user) { %>
-            <tr>
-              <td><%= user.name %></td>
-              <td><%= user.email %></td>
-              <td><%= user.role %></td>
-              <td>
-                <!-- You can add edit/delete functionality here -->
-                <a
-                  href="/user/edit/<%= user._id %>"
-                  class="btn btn-warning btn-sm"
-                  >Edit</a
-                >
-                <a
-                  href="/user/delete/<%= user._id %>"
-                  class="btn btn-danger btn-sm"
-                  >Delete</a
-                >
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
+      <% if (users && users.length > 0) { %> <% users.forEach(user => { %>
+      <div class="feedback-card">
+        <h5><%= user.name %> (<%= user.role %>)</h5>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Visit Count:</strong> <%= user.visitCount %></p>
+        <p>
+          <strong>Rating:</strong>
+          <span class="rating">
+            <% for (let i = 0; i < user.rating; i++) { %>★<% } %> <% for (let i
+            = user.rating; i < 5; i++) { %>☆<% } %>
+          </span>
+        </p>
+        <p><strong>Feedback:</strong></p>
+        <ul>
+          <% if (user.feedback && user.feedback.length > 0) { %> <%
+          user.feedback.forEach(item => { %>
+          <li><%= item.text %></li>
+          <% }) %> <% } else { %>
+          <li>No feedback available</li>
+          <% } %>
+        </ul>
       </div>
-
-      <div class="text-center">
-        <a href="/auth/logout" class="btn btn-danger mt-3">Logout</a>
-      </div>
+      <% }) %> <% } else { %>
+      <p class="text-center">No users or feedback available.</p>
+      <% } %>
     </div>
   </body>
 </html>
